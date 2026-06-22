@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartFactory Pro | Production Tracking Simulation</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="login-screen" id="loginScreen">
+    <div class="login-card">
+      <div class="logo-box">SF</div>
+      <h1>SmartFactory Pro</h1>
+      <p>Çelik Fabrikası Üretim Takip Simülasyonu</p>
+
+      <label>Kullanıcı Adı</label>
+      <input id="username" type="text" value="admin" />
+
+      <label>Şifre</label>
+      <input id="password" type="password" value="1234" />
+
+      <button id="loginBtn">Giriş Yap</button>
+      <small>Demo giriş: admin / 1234</small>
+    </div>
+  </div>
+
+  <div class="app hidden" id="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">SF</div>
+        <div>
+          <h2>SmartFactory</h2>
+          <span>Production Control</span>
+        </div>
+      </div>
+
+      <nav>
+        <button class="nav-btn active" data-page="dashboard">Dashboard</button>
+        <button class="nav-btn" data-page="production">Production</button>
+        <button class="nav-btn" data-page="machines">Machines</button>
+        <button class="nav-btn" data-page="maintenance">Maintenance</button>
+        <button class="nav-btn" data-page="reports">Reports</button>
+        <button class="nav-btn" data-page="users">Users</button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="themeBtn">Dark / Light</button>
+        <button id="logoutBtn">Logout</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h1 id="pageTitle">Dashboard</h1>
+          <p>Real-time factory monitoring simulation</p>
+        </div>
+
+        <div class="top-actions">
+          <input id="globalSearch" type="search" placeholder="Search machine, line, operator..." />
+          <select id="languageSelect">
+            <option value="tr">TR</option>
+            <option value="en">EN</option>
+          </select>
+        </div>
+      </header>
+
+      <section id="dashboard" class="page active">
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <span>Total Production</span>
+            <strong id="totalProduction">0 tons</strong>
+            <small>Daily output</small>
+          </div>
+          <div class="kpi-card">
+            <span>Efficiency</span>
+            <strong id="efficiency">0%</strong>
+            <small>Production performance</small>
+          </div>
+          <div class="kpi-card">
+            <span>Active Machines</span>
+            <strong id="activeMachines">0/0</strong>
+            <small>Operational status</small>
+          </div>
+          <div class="kpi-card warning">
+            <span>Open Maintenance</span>
+            <strong id="openMaintenance">0</strong>
+            <small>Requires attention</small>
+          </div>
+        </div>
+
+        <div class="grid two">
+          <div class="card">
+            <div class="section-header">
+              <h3>Weekly Production Chart</h3>
+              <button id="refreshBtn">Refresh Data</button>
+            </div>
+            <div class="chart" id="productionChart"></div>
+          </div>
+
+          <div class="card">
+            <h3>Factory Map</h3>
+            <div class="factory-map">
+              <div class="zone active">Line A<br><span>Furnace</span></div>
+              <div class="zone active">Line B<br><span>Rolling</span></div>
+              <div class="zone alert">Line C<br><span>Cooling</span></div>
+              <div class="zone active">Line D<br><span>Packaging</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Recent Activity</h3>
+          <div id="activityLog" class="activity-log"></div>
+        </div>
+      </section>
+
+      <section id="production" class="page">
+        <div class="card">
+          <div class="section-header">
+            <h3>Production Records</h3>
+            <button id="addProductionBtn">Add New Record</button>
+          </div>
+
+          <div class="filters">
+            <select id="lineFilter">
+              <option value="all">All Lines</option>
+              <option value="Line A">Line A</option>
+              <option value="Line B">Line B</option>
+              <option value="Line C">Line C</option>
+              <option value="Line D">Line D</option>
+            </select>
+            <select id="statusFilter">
+              <option value="all">All Status</option>
+              <option value="Completed">Completed</option>
+              <option value="Running">Running</option>
+              <option value="Delayed">Delayed</option>
+            </select>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Line</th>
+                  <th>Product</th>
+                  <th>Target</th>
+                  <th>Actual</th>
+                  <th>Efficiency</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="productionTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="machines" class="page">
+        <div class="card">
+          <h3>Machine Performance</h3>
+          <div class="machine-grid" id="machineGrid"></div>
+        </div>
+      </section>
+
+      <section id="maintenance" class="page">
+        <div class="card">
+          <div class="section-header">
+            <h3>Maintenance Requests</h3>
+            <button id="addMaintenanceBtn">Create Request</button>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Ticket</th>
+                  <th>Machine</th>
+                  <th>Issue</th>
+                  <th>Priority</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="maintenanceTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="reports" class="page">
+        <div class="grid two">
+          <div class="card">
+            <h3>Report Generator</h3>
+            <p class="muted">This simulation creates CSV and printable reports from current factory data.</p>
+            <button id="csvBtn">Download CSV Report</button>
+            <button id="printBtn">Print / Save as PDF</button>
+          </div>
+
+          <div class="card">
+            <h3>Production Summary</h3>
+            <div id="reportSummary" class="report-summary"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="users" class="page">
+        <div class="card">
+          <h3>User Management</h3>
+          <div class="user-list" id="userList"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal hidden" id="modal">
+    <div class="modal-card">
+      <h3 id="modalTitle">Add Record</h3>
+      <div id="modalBody"></div>
+      <div class="modal-actions">
+        <button id="saveModalBtn">Save</button>
+        <button id="closeModalBtn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
